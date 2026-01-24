@@ -1,0 +1,59 @@
+{
+  "agent": {
+    "name": "PatternAnalyzer",
+    "version": "1.0.0",
+    "description": "Analyzes trading patterns for insider detection"
+  },
+  "detectors": {
+    "early_buy": {
+      "enabled": true,
+      "early_window_seconds": 60,
+      "min_buy_amount_sol": 0.1,
+      "suspicious_timing_threshold": 5.0
+    },
+    "coordinated_trading": {
+      "enabled": true,
+      "timing_correlation_threshold": 0.8,
+      "min_coordinated_trades": 3,
+      "time_window_seconds": 300
+    },
+    "liquidity_manipulation": {
+      "enabled": true,
+      "flash_loan_threshold": 1000,
+      "pump_dump_ratio": 3.0,
+      "suspicious_volume_multiplier": 10.0
+    }
+  },
+  "ml_models": {
+    "insider_detection": {
+      "enabled": true,
+      "model_type": "ensemble",
+      "threshold": 0.7,
+      "features": [
+        "timing",
+        "amount",
+        "frequency",
+        "network"
+      ],
+      "model_path": "data/models/insider_detection.pkl"
+    },
+    "pattern_classifier": {
+      "enabled": true,
+      "num_classes": 6,
+      "confidence_threshold": 0.6,
+      "model_path": "data/models/pattern_classifier.pkl"
+    }
+  },
+  "analysis": {
+    "batch_size": 100,
+    "parallel_processing": true,
+    "max_workers": 4,
+    "cache_results": true,
+    "cache_ttl_seconds": 300
+  },
+  "memory": {
+    "enabled": true,
+    "store_patterns": true,
+    "pattern_importance": "high"
+  }
+}

@@ -1,0 +1,11 @@
+# Wallet Analyzer - Wallet profiling and analysis
+FROM godmode/agent-template:latest
+
+WORKDIR /app
+
+# Set agent type
+ENV AGENT_MODULE=wallet_analyzer_agent
+ENV AGENT_TYPE=wallet_analyzer
+
+# Run wallet analyzer
+CMD ["python", "-u", "agents/wallet_analyzer_agent.py"]

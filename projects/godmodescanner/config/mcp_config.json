@@ -1,0 +1,42 @@
+{
+  "mcp_server": {
+    "host": "0.0.0.0",
+    "port": 8000,
+    "redis_url": "redis://localhost:6379",
+    "cors_origins": [
+      "*"
+    ],
+    "log_level": "info"
+  },
+  "redis_streams": {
+    "max_stream_length": 10000,
+    "consumer_batch_size": 10,
+    "consumer_block_ms": 5000,
+    "pending_claim_idle_ms": 60000
+  },
+  "agent_defaults": {
+    "metrics_report_interval": 30,
+    "heartbeat_interval": 30,
+    "task_timeout": 300
+  },
+  "scaling": {
+    "check_interval": 30,
+    "scale_up_thresholds": {
+      "avg_queue_size": 100,
+      "avg_cpu_usage": 80,
+      "avg_memory_usage": 85
+    },
+    "scale_down_thresholds": {
+      "avg_queue_size": 10,
+      "avg_cpu_usage": 20,
+      "min_idle_time": 300
+    },
+    "min_instances": 1,
+    "max_instances": 10
+  },
+  "monitoring": {
+    "agent_health_check_interval": 60,
+    "stale_agent_timeout": 300,
+    "metrics_retention_seconds": 300
+  }
+}

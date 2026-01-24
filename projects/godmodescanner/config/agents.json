@@ -1,0 +1,43 @@
+{
+  "agents": {
+    "orchestrator": {
+      "enabled": true,
+      "class": "agents.orchestrator.OrchestratorAgent",
+      "config_file": "config/orchestrator.json"
+    },
+    "data_fetcher": {
+      "enabled": true,
+      "class": "agents.data_fetcher.DataFetcherAgent",
+      "config": {
+        "rpc_endpoints": [
+          "https://api.mainnet-beta.solana.com"
+        ],
+        "ws_endpoint": "wss://api.mainnet-beta.solana.com",
+        "rate_limit_per_second": 10
+      }
+    },
+    "planner": {
+      "enabled": true,
+      "class": "agents.planner.PlannerAgent",
+      "config": {
+        "memory_enabled": true,
+        "optimization_enabled": true
+      }
+    },
+    "pattern_analyzer": {
+      "enabled": true,
+      "class": "agents.pattern_analyzer.PatternAnalyzerAgent",
+      "config_file": "agents/pattern_analyzer/config/agent_config.json"
+    },
+    "wallet_profiler": {
+      "enabled": true,
+      "class": "agents.wallet_profiler.WalletProfilerAgent",
+      "config_file": "agents/wallet_profiler/config/agent_config.json"
+    },
+    "memory": {
+      "enabled": true,
+      "class": "agents.memory.storage.MemoryStorage",
+      "config_file": "agents/memory/config/memory_config.json"
+    }
+  }
+}

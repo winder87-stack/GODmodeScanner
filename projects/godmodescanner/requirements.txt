@@ -1,0 +1,42 @@
+# GODMODESCANNER Dependencies
+# Python 3.13 compatible versions
+# Updated: 2026-01-23
+
+# Core Async & Networking
+aiohttp==3.10.11
+websockets==13.1
+aiodns==3.2.0
+
+# Database & Caching
+redis==5.2.1
+qdrant-client==1.12.1
+
+# Solana Blockchain
+solana==0.35.0
+solders==0.21.0
+anchorpy==0.21.0
+
+# Data Processing (Python 3.13 compatible versions)
+pandas>=2.2.0  # 2.2+ supports Python 3.13
+numpy>=1.26.0,<2.0.0  # Compatible with Python 3.13
+
+# Machine Learning
+scikit-learn==1.6.1
+torch==2.6.0
+transformers==4.49.0
+
+# Utilities
+python-dotenv==1.0.1
+pyyaml==6.0.2
+rich==13.9.4
+click==8.1.8
+
+# Monitoring & Metrics
+prometheus-client==0.21.1
+psutil==6.1.1
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.24.0
+pytest-cov==6.0.0
+networkx==3.4.2

@@ -1,0 +1,18 @@
+# Transaction Monitor - Blockchain data ingestion
+FROM godmode/agent-template:latest
+
+WORKDIR /app
+
+# Additional dependencies for Solana
+RUN pip install --no-cache-dir \
+    solana \
+    solders \
+    anchorpy \
+    websockets
+
+# Set agent type
+ENV AGENT_MODULE=transaction_monitor
+ENV AGENT_TYPE=transaction_monitor
+
+# Run transaction monitor
+CMD ["python", "-u", "agents/transaction_monitor.py"]

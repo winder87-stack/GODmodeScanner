@@ -1,0 +1,36 @@
+# Supervisor - Agent lifecycle manager
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install Docker CLI for container spawning
+RUN apt-get update && apt-get install -y \
+    docker.io \
+    gcc \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements and install
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy project files
+COPY agents/ ./agents/
+COPY utils/ ./utils/
+COPY config/ ./config/
+
+# Create directories
+RUN mkdir -p /app/logs /app/data
+
+# Set environment
+ENV PYTHONPATH=/app
+ENV PYTHONUNBUFFERED=1
+ENV DOCKER_HOST=unix:///var/run/docker.sock
+ENV SPAWN_MODE=docker
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD python -c "import redis; r=redis.from_url('redis://redis:6379'); r.ping()" || exit 1
+
+# Run supervisor
+CMD ["python", "-u", "agents/supervisor_agent.py"]

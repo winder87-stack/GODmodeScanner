@@ -1,0 +1,100 @@
+# GODMODESCANNER .dockerignore
+# Optimize Docker builds by excluding unnecessary files
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+PIPFILE.lock
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Documentation
+docs/_build/
+*.md
+!README.md
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Docker
+docker-compose*.yml
+Dockerfile*
+.dockerignore
+
+# Logs and data (will be mounted as volumes)
+logs/
+*.log
+data/memory/
+data/models/*.pt
+data/models/*.pth
+*.faiss
+*.pkl
+dump.rdb
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+SYSTEM_*.json
+.env
+.env.*
+!.env.template
+
+# Scripts (not needed in container)
+scripts/docker_startup.sh
+scripts/deploy.py
+
+# Tests (run separately)
+tests/
+
+# Makefile
+Makefile

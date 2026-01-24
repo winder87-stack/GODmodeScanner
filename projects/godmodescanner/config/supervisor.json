@@ -1,0 +1,54 @@
+{
+  "auto_scaling_enabled": true,
+  "health_check_interval": 30,
+  "metrics_collection_interval": 10,
+  "workload_thresholds": {
+    "max_queue_size": 100,
+    "max_cpu_percent": 80.0,
+    "max_memory_percent": 85.0,
+    "max_processing_time_ms": 5000.0,
+    "min_queue_size": 10,
+    "min_cpu_percent": 20.0,
+    "idle_time_seconds": 300,
+    "heartbeat_timeout_seconds": 60,
+    "max_consecutive_failures": 3
+  },
+  "agent_configs": {
+    "transaction_monitor": {
+      "module": "transaction_monitor",
+      "min_instances": 1,
+      "max_instances": 3,
+      "priority": 1
+    },
+    "wallet_analyzer": {
+      "module": "wallet_analyzer_agent",
+      "min_instances": 2,
+      "max_instances": 5,
+      "priority": 2
+    },
+    "pattern_recognition": {
+      "module": "pattern_recognition_agent",
+      "min_instances": 1,
+      "max_instances": 3,
+      "priority": 3
+    },
+    "sybil_detection": {
+      "module": "sybil_detection_agent",
+      "min_instances": 1,
+      "max_instances": 2,
+      "priority": 4
+    },
+    "risk_scoring": {
+      "module": "risk_scoring_agent",
+      "min_instances": 1,
+      "max_instances": 3,
+      "priority": 5
+    },
+    "alert_manager": {
+      "module": "alert_manager_agent",
+      "min_instances": 1,
+      "max_instances": 2,
+      "priority": 6
+    }
+  }
+}

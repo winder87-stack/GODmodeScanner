@@ -1,0 +1,724 @@
+{
+  "timestamp": "2026-01-24T15:49:16.383844",
+  "summary": {},
+  "all_agents": [
+    {
+      "name": "system_health_report",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/system_health_report.py",
+      "dependencies": [
+        "Any",
+        "Counter",
+        "Dict,",
+        "List,",
+        "Optional,",
+        "RedisPubSubManager",
+        "Tuple,"
+      ],
+      "last_modified": "2026-01-24 15:08:22"
+    },
+    {
+      "name": "daisy_chain_detector",
+      "type": "standalone",
+      "status": "ready",
+      "file_path": "agents/daisy_chain_detector.py",
+      "dependencies": [
+        "Any,",
+        "Dict,",
+        "List,",
+        "Optional,",
+        "RedisPubSubManager",
+        "Set,",
+        "Tuple"
+      ],
+      "last_modified": "2026-01-24 14:02:11"
+    },
+    {
+      "name": "behavioral_similarity_analyzer",
+      "type": "standalone",
+      "status": "ready",
+      "file_path": "agents/behavioral_similarity_analyzer.py",
+      "dependencies": [
+        "Any",
+        "Counter",
+        "Dict,",
+        "List,",
+        "Optional,",
+        "RedisPubSubManager",
+        "Set,",
+        "Tuple,"
+      ],
+      "last_modified": "2026-01-24 14:17:56"
+    },
+    {
+      "name": "wallet_analyzer_agent",
+      "type": "structured",
+      "status": "ready",
+      "file_path": "agents/wallet_analyzer_agent.py",
+      "dependencies": [
+        "Dict,",
+        "EventEmitter",
+        "List,",
+        "Optional",
+        "RedisPubSubManager",
+        "Set,"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "planner",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/planner.py",
+      "dependencies": [
+        "Any",
+        "Dict,",
+        "List,",
+        "Optional,"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "risk_scoring_agent",
+      "type": "structured",
+      "status": "ready",
+      "file_path": "agents/risk_scoring_agent.py",
+      "dependencies": [
+        "Dict,",
+        "List,",
+        "Optional,",
+        "Tuple"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "orchestrator",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/orchestrator.py",
+      "dependencies": [
+        "Any",
+        "Dict,",
+        "Enum",
+        "List,",
+        "Optional,"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "sybil_detection_agent",
+      "type": "structured",
+      "status": "ready",
+      "file_path": "agents/sybil_detection_agent.py",
+      "dependencies": [
+        "Any,",
+        "Dict,",
+        "List,",
+        "Optional",
+        "Path",
+        "SybilDetector"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "data_fetcher",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/data_fetcher.py",
+      "dependencies": [
+        "Any",
+        "Dict,",
+        "List,",
+        "Optional,"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "wallet_cluster_deanonymizer",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/wallet_cluster_deanonymizer.py",
+      "dependencies": [
+        "Any,",
+        "Dict,",
+        "List,",
+        "Optional,",
+        "RealDictCursor",
+        "RedisPubSubManager",
+        "Set"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "autonomous_alert_trigger",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/autonomous_alert_trigger.py",
+      "dependencies": [
+        "Any",
+        "Dict,",
+        "List,",
+        "Optional,",
+        "RedisPubSubManager",
+        "Set,"
+      ],
+      "last_modified": "2026-01-24 14:47:07"
+    },
+    {
+      "name": "pattern_learning_adaptation",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/pattern_learning_adaptation.py",
+      "dependencies": [
+        "Any",
+        "Counter",
+        "Dict,",
+        "List,",
+        "Optional,",
+        "Set,",
+        "Tuple,"
+      ],
+      "last_modified": "2026-01-24 14:55:14"
+    },
+    {
+      "name": "graph_traversal_phase1",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/graph_traversal_phase1.py",
+      "dependencies": [
+        "Any",
+        "Dict,",
+        "List,",
+        "Optional,",
+        "RedisPubSubManager",
+        "RpcManager",
+        "Set,",
+        "ThreadPoolExecutor"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "realtime_cluster_expansion",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/realtime_cluster_expansion.py",
+      "dependencies": [
+        "Any,",
+        "Dict,",
+        "List,",
+        "Optional,",
+        "RedisPubSubManager",
+        "Set,",
+        "Tuple"
+      ],
+      "last_modified": "2026-01-24 11:46:54"
+    },
+    {
+      "name": "transaction_monitor",
+      "type": "standalone",
+      "status": "ready",
+      "file_path": "agents/transaction_monitor.py",
+      "dependencies": [
+        "Any,",
+        "Dict,",
+        "EventType",
+        "List,",
+        "Optional",
+        "Path",
+        "PumpFunParser,",
+        "RedisPubSubManager",
+        "WebSocketManager"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "alert_manager_agent",
+      "type": "structured",
+      "status": "ready",
+      "file_path": "agents/alert_manager_agent.py",
+      "dependencies": [
+        "Dict,",
+        "List,",
+        "Optional,",
+        "Set"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "cluster_scoring_pnl",
+      "type": "standalone",
+      "status": "ready",
+      "file_path": "agents/cluster_scoring_pnl.py",
+      "dependencies": [
+        "Any",
+        "Dict,",
+        "List,",
+        "Optional,",
+        "RedisPubSubManager",
+        "Set,",
+        "Tuple,"
+      ],
+      "last_modified": "2026-01-24 14:25:55"
+    },
+    {
+      "name": "funding_hub_identifier",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/funding_hub_identifier.py",
+      "dependencies": [
+        "Any",
+        "Dict,",
+        "List,",
+        "Optional,",
+        "RedisPubSubManager",
+        "Set,",
+        "Tuple,"
+      ],
+      "last_modified": "2026-01-24 14:07:32"
+    },
+    {
+      "name": "system_diagnostic",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/system_diagnostic.py",
+      "dependencies": [
+        "Any,",
+        "Dict,",
+        "List,",
+        "Path",
+        "Tuple"
+      ],
+      "last_modified": "2026-01-24 15:49:16"
+    },
+    {
+      "name": "pattern_recognition_agent",
+      "type": "structured",
+      "status": "ready",
+      "file_path": "agents/pattern_recognition_agent.py",
+      "dependencies": [
+        "Any,",
+        "DBSCAN",
+        "Dict,",
+        "List,",
+        "Optional,",
+        "RedisPubSubManager",
+        "Set,",
+        "Tuple"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "wallet_profiler",
+      "type": "structured",
+      "status": "ready",
+      "file_path": "agents/wallet_profiler/agent.py",
+      "dependencies": [
+        "Any",
+        "Dict,",
+        "List,",
+        "Optional,"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "models",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/wallet_profiler/models.py",
+      "dependencies": [
+        "Any",
+        "Dict,",
+        "Enum",
+        "List,",
+        "Optional,"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "storage",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/memory/storage.py",
+      "dependencies": [
+        "Any",
+        "Dict,",
+        "List,",
+        "Memory,",
+        "MemoryImportance",
+        "MemoryQuery,",
+        "MemoryType,",
+        "Optional,",
+        "Path"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "memory_models",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/memory/memory_models.py",
+      "dependencies": [
+        "Any",
+        "Dict,",
+        "Enum",
+        "List,",
+        "Optional,"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "pattern_analyzer",
+      "type": "structured",
+      "status": "ready",
+      "file_path": "agents/pattern_analyzer/agent.py",
+      "dependencies": [
+        "Any",
+        "Dict,",
+        "List,",
+        "Optional,"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "ml_models",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/pattern_analyzer/models/ml_models.py",
+      "dependencies": [
+        "Any,",
+        "Dict,",
+        "List,",
+        "Optional,",
+        "Tuple"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "data_models",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/pattern_analyzer/models/data_models.py",
+      "dependencies": [
+        "Any",
+        "Dict,",
+        "Enum",
+        "List,",
+        "Optional,"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "insider_detectors",
+      "type": "standalone",
+      "status": "ready",
+      "file_path": "agents/pattern_analyzer/detectors/insider_detectors.py",
+      "dependencies": [
+        "Any",
+        "Dict,",
+        "List,",
+        "Optional,"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "query_engine",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/memory/queries/query_engine.py",
+      "dependencies": [
+        "Any,",
+        "Dict,",
+        "List,",
+        "Memory,",
+        "MemoryQuery,",
+        "MemoryStorage",
+        "MemoryType",
+        "Optional,",
+        "Tuple"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "consolidator",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/memory/consolidators/consolidator.py",
+      "dependencies": [
+        "Any",
+        "Dict,",
+        "List,",
+        "Memory,",
+        "MemoryImportance",
+        "MemoryStorage",
+        "MemoryType,",
+        "Optional,"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "behavior_tracker",
+      "type": "utility",
+      "status": "ready",
+      "file_path": "agents/wallet_profiler/trackers/behavior_tracker.py",
+      "dependencies": [
+        "Any",
+        "Dict,",
+        "List,",
+        "Optional,"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "reputation_analyzer",
+      "type": "standalone",
+      "status": "ready",
+      "file_path": "agents/wallet_profiler/profilers/reputation_analyzer.py",
+      "dependencies": [
+        "Any",
+        "Dict,",
+        "List,",
+        "Optional,"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "sybil_detector",
+      "type": "standalone",
+      "status": "ready",
+      "file_path": "agents/wallet_profiler/profilers/sybil_detector.py",
+      "dependencies": [
+        "Any,",
+        "Dict,",
+        "List,",
+        "Optional,",
+        "Set,",
+        "Tuple"
+      ],
+      "last_modified": "2026-01-24 04:13:08"
+    }
+  ],
+  "specialized_agents": {
+    "transaction_monitor": {
+      "status": "missing_deps",
+      "file_path": "agents/transaction_monitor.py",
+      "missing": [
+        "Configuration file: transaction_monitor_config.json",
+        "Python package: Any,",
+        "Python package: Dict,",
+        "Python package: EventType",
+        "Python package: List,",
+        "Python package: Optional",
+        "Python package: Path",
+        "Python package: PumpFunParser,",
+        "Python package: RedisPubSubManager",
+        "Python package: WebSocketManager"
+      ]
+    },
+    "wallet_analyzer": {
+      "status": "missing_deps",
+      "file_path": "agents/wallet_analyzer_agent.py",
+      "missing": [
+        "Configuration file: wallet_analyzer_agent_config.json",
+        "Python package: Dict,",
+        "Python package: EventEmitter",
+        "Python package: List,",
+        "Python package: Optional",
+        "Python package: RedisPubSubManager",
+        "Python package: Set,"
+      ]
+    },
+    "pattern_recognition": {
+      "status": "missing_deps",
+      "file_path": "agents/pattern_recognition_agent.py",
+      "missing": [
+        "Configuration file: pattern_recognition_agent_config.json",
+        "Python package: Any,",
+        "Python package: DBSCAN",
+        "Python package: Dict,",
+        "Python package: List,",
+        "Python package: Optional,",
+        "Python package: RedisPubSubManager",
+        "Python package: Set,",
+        "Python package: Tuple"
+      ]
+    },
+    "sybil_detection": {
+      "status": "missing_deps",
+      "file_path": "agents/sybil_detection_agent.py",
+      "missing": [
+        "Configuration file: sybil_detection_agent_config.json",
+        "Python package: Any,",
+        "Python package: Dict,",
+        "Python package: List,",
+        "Python package: Optional",
+        "Python package: Path",
+        "Python package: SybilDetector"
+      ]
+    },
+    "risk_scoring": {
+      "status": "missing_deps",
+      "file_path": "agents/risk_scoring_agent.py",
+      "missing": [
+        "Configuration file: risk_scoring_agent_config.json",
+        "Python package: Dict,",
+        "Python package: List,",
+        "Python package: Optional,",
+        "Python package: Tuple"
+      ]
+    },
+    "alert_manager": {
+      "status": "missing_deps",
+      "file_path": "agents/alert_manager_agent.py",
+      "missing": [
+        "Configuration file: alert_manager_agent_config.json",
+        "Python package: Dict,",
+        "Python package: List,",
+        "Python package: Optional,",
+        "Python package: Set"
+      ]
+    }
+  },
+  "knowledge_base": [
+    {
+      "name": "GODMODESCANNER_KNOWLEDGE.md",
+      "path": "data/knowledge/GODMODESCANNER_KNOWLEDGE.md",
+      "size_bytes": 28288,
+      "size_human": "27.62 KB",
+      "last_modified": "2026-01-24 04:13:08",
+      "type": "md"
+    }
+  ],
+  "configuration": [
+    {
+      "name": "detection_rules.json",
+      "path": "config/detection_rules.json",
+      "size_bytes": 3669,
+      "size_human": "3.58 KB",
+      "last_modified": "2026-01-24 14:55:28"
+    },
+    {
+      "name": "agents.json",
+      "path": "config/agents.json",
+      "size_bytes": 1220,
+      "size_human": "1.19 KB",
+      "last_modified": "2026-01-24 04:13:08"
+    },
+    {
+      "name": "orchestrator.json",
+      "path": "config/orchestrator.json",
+      "size_bytes": 599,
+      "size_human": "599.00 B",
+      "last_modified": "2026-01-24 04:13:08"
+    }
+  ],
+  "dependencies": {
+    "python_packages": {
+      "aiohttp": "installed",
+      "websockets": "missing",
+      "aiodns": "missing",
+      "redis": "missing",
+      "qdrant-client": "missing",
+      "solana": "missing",
+      "solders": "missing",
+      "anchorpy": "missing",
+      "pandas": "missing",
+      "numpy": "installed",
+      "scikit-learn": "missing",
+      "torch": "missing",
+      "transformers": "missing",
+      "python-dotenv": "missing",
+      "pyyaml": "missing",
+      "rich": "missing",
+      "click": "missing",
+      "prometheus-client": "missing",
+      "psutil": "missing",
+      "pytest": "missing",
+      "pytest-asyncio": "missing",
+      "pytest-cov": "missing",
+      "networkx": "installed"
+    },
+    "external_services": {
+      "redis": "not_available",
+      "timescaledb": "not_available"
+    },
+    "data_directories": {
+      "graph_data": "exists",
+      "memory": "exists",
+      "models": "exists",
+      "knowledge": "exists"
+    },
+    "config_files": {
+      "agents.json": "exists",
+      "detection_rules.json": "exists",
+      "orchestrator.json": "exists"
+    }
+  },
+  "startup_requirements": {
+    "install_packages": [
+      "websockets",
+      "aiodns",
+      "redis",
+      "qdrant-client",
+      "solana",
+      "solders",
+      "anchorpy",
+      "pandas",
+      "scikit-learn",
+      "torch",
+      "transformers",
+      "python-dotenv",
+      "pyyaml",
+      "rich",
+      "click",
+      "prometheus-client",
+      "psutil",
+      "pytest",
+      "pytest-asyncio",
+      "pytest-cov"
+    ],
+    "create_directories": [],
+    "configure_files": [],
+    "setup_commands": [
+      "pip install websockets aiodns redis qdrant-client solana solders anchorpy pandas scikit-learn torch transformers python-dotenv pyyaml rich click prometheus-client psutil pytest pytest-asyncio pytest-cov"
+    ],
+    "startup_sequence": [
+      {
+        "step": 1,
+        "name": "Start Redis Server",
+        "command": "redis-server --daemonize yes",
+        "description": "Start Redis for pub/sub messaging and caching"
+      },
+      {
+        "step": 2,
+        "name": "Start TimescaleDB",
+        "command": "docker-compose up -d timescaledb",
+        "description": "Start TimescaleDB for time-series data storage"
+      },
+      {
+        "step": 3,
+        "name": "Initialize Database Schema",
+        "command": "python scripts/init_timescaledb.py",
+        "description": "Create database tables and indexes"
+      },
+      {
+        "step": 4,
+        "name": "Start Transaction Monitor",
+        "command": "python agents/transaction_monitor.py",
+        "description": "Begin monitoring pump.fun transactions"
+      },
+      {
+        "step": 5,
+        "name": "Start Orchestrator",
+        "command": "python agents/orchestrator.py",
+        "description": "Coordinate all agents and manage workflow"
+      },
+      {
+        "step": 6,
+        "name": "Start Alert Manager",
+        "command": "python agents/alert_manager_agent.py",
+        "description": "Handle alert generation and delivery"
+      }
+    ]
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2025-01-23T00:00:00Z",
+    "description": "Database of known insider wallets flagged by GODMODESCANNER"
+  },
+  "wallets": [
+    {
+      "address": "EXAMPLE_WALLET_ADDRESS_1",
+      "risk_level": "CRITICAL",
+      "first_flagged": "2025-01-15T12:00:00Z",
+      "total_flags": 15,
+      "patterns_matched": ["EARLY_BUYER", "QUICK_FLIP", "COORDINATED"],
+      "notes": "Part of known Telegram alpha group. Consistently buys within 2 seconds.",
+      "evidence": {
+        "tokens_involved": 15,
+        "avg_buy_time_seconds": 1.8,
+        "avg_hold_time_minutes": 12,
+        "profit_estimate_sol": 45.5
+      }
+    },
+    {
+      "address": "EXAMPLE_WALLET_ADDRESS_2",
+      "risk_level": "HIGH",
+      "first_flagged": "2025-01-10T08:00:00Z",
+      "total_flags": 8,
+      "patterns_matched": ["BUNDLER", "LARGE_BUY"],
+      "notes": "Uses Jito bundles. Large position sizes.",
+      "evidence": {
+        "tokens_involved": 8,
+        "avg_buy_time_seconds": 0.5,
+        "avg_position_sol": 12.3,
+        "profit_estimate_sol": 89.2
+      }
+    }
+  ],
+  "clusters": [
+    {
+      "cluster_id": "sybil_cluster_001",
+      "wallet_count": 12,
+      "wallets": [
+        "WALLET_A",
+        "WALLET_B",
+        "WALLET_C"
+      ],
+      "common_funding_source": "FUNDING_WALLET",
+      "detection_method": "COMMON_FUNDING",
+      "first_detected": "2025-01-12T00:00:00Z",
+      "notes": "Sybil cluster operating together on multiple launches"
+    }
+  ]
+}

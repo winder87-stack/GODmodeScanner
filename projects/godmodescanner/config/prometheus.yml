@@ -1,0 +1,42 @@
+# Prometheus configuration for godmodescanner monitoring
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'godmodescanner'
+    environment: 'production'
+
+scrape_configs:
+  - job_name: 'godmodescanner'
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          service: 'orchestrator'
+
+  - job_name: 'pattern_analyzer'
+    static_configs:
+      - targets: ['localhost:9091']
+        labels:
+          service: 'pattern_analyzer'
+
+  - job_name: 'wallet_profiler'
+    static_configs:
+      - targets: ['localhost:9092']
+        labels:
+          service: 'wallet_profiler'
+
+  - job_name: 'data_fetcher'
+    static_configs:
+      - targets: ['localhost:9093']
+        labels:
+          service: 'data_fetcher'
+
+rule_files:
+  # - 'alerts.yml'
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - 'localhost:9093'

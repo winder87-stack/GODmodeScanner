@@ -1,0 +1,41 @@
+{
+  "redis_url": "redis://localhost:6379",
+  "max_supervisors": 3,
+  "supervisor_distribution": "round_robin",
+  "enable_cross_supervisor_communication": true,
+  "orchestrator_id": "orchestrator_main",
+  "monitoring": {
+    "enabled": true,
+    "interval_seconds": 60,
+    "metrics_retention_hours": 24
+  },
+  "supervisor_configs": [
+    {
+      "supervisor_id": "supervisor_primary",
+      "config_path": "/a0/usr/projects/godmodescanner/config/supervisor.json",
+      "priority": 1,
+      "agent_types": [
+        "transaction_monitor",
+        "wallet_analyzer"
+      ]
+    },
+    {
+      "supervisor_id": "supervisor_secondary",
+      "config_path": "/a0/usr/projects/godmodescanner/config/supervisor.json",
+      "priority": 2,
+      "agent_types": [
+        "pattern_recognition",
+        "sybil_detection"
+      ]
+    },
+    {
+      "supervisor_id": "supervisor_tertiary",
+      "config_path": "/a0/usr/projects/godmodescanner/config/supervisor.json",
+      "priority": 3,
+      "agent_types": [
+        "risk_scoring",
+        "alert_manager"
+      ]
+    }
+  ]
+}

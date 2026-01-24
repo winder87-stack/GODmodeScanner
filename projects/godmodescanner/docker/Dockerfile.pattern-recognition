@@ -1,0 +1,18 @@
+# Pattern Recognition - ML-based pattern detection
+FROM godmode/agent-template:latest
+
+WORKDIR /app
+
+# Additional ML dependencies
+RUN pip install --no-cache-dir \
+    torch \
+    transformers \
+    xgboost \
+    scikit-learn
+
+# Set agent type
+ENV AGENT_MODULE=pattern_recognition_agent
+ENV AGENT_TYPE=pattern_recognition
+
+# Run pattern recognition
+CMD ["python", "-u", "agents/pattern_recognition_agent.py"]

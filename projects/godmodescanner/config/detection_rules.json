@@ -1,0 +1,121 @@
+{
+  "insider_detection": {
+    "early_buy_threshold_seconds": 30,
+    "suspicious_timing_score": 0.85,
+    "min_buy_amount_sol": 0.05,
+    "coordination_threshold": 0.65,
+    "min_coordinated_wallets": 2
+  },
+  "liquidity_manipulation": {
+    "flash_loan_threshold_sol": 500,
+    "pump_dump_ratio": 2.5,
+    "suspicious_volume_multiplier": 5.0,
+    "min_liquidity_change_percent": 30
+  },
+  "wallet_reputation": {
+    "min_reputation_score": 0.25,
+    "max_risk_level": "high",
+    "sybil_probability_threshold": 0.65,
+    "blacklist_enabled": true
+  },
+  "pattern_thresholds": {
+    "wash_trading_threshold": 0.7,
+    "bot_behavior_score": 0.75,
+    "network_clustering_threshold": 0.55
+  },
+  "alerting": {
+    "critical_alert_threshold": 0.85,
+    "high_alert_threshold": 0.65,
+    "medium_alert_threshold": 0.45,
+    "enable_notifications": true,
+    "notification_channels": [
+      "webhook",
+      "log",
+      "telegram"
+    ]
+  },
+  "model_thresholds": {
+    "xgboost_positive_threshold": 0.6,
+    "ensemble_min_votes": 2,
+    "confidence_interval": 0.95
+  },
+  "adaptive_weights": {
+    "EARLY_BUYER": {
+      "weight": 0.327,
+      "base_weight": 0.35,
+      "last_adjusted": "2026-01-24T14:55:28.880878+00:00",
+      "adjustment_percent": -6.67,
+      "reason": "Lower than average rug correlation (0.0%)",
+      "rug_correlation": 0.0
+    },
+    "COORDINATED_BUYING": {
+      "weight": 0.367,
+      "base_weight": 0.3,
+      "last_adjusted": "2026-01-24T14:55:28.881065+00:00",
+      "adjustment_percent": 22.5,
+      "reason": "High rug correlation (100.0%) and early buyer rate (100.0%)",
+      "rug_correlation": 1.0
+    },
+    "LARGE_BUY": {
+      "weight": 0.187,
+      "base_weight": 0.2,
+      "last_adjusted": "2026-01-24T14:55:28.881241+00:00",
+      "adjustment_percent": -6.67,
+      "reason": "Lower than average rug correlation (0.0%)",
+      "rug_correlation": 0.0
+    },
+    "QUICK_FLIP": {
+      "weight": 0.233,
+      "base_weight": 0.25,
+      "last_adjusted": "2026-01-24T14:55:28.881392+00:00",
+      "adjustment_percent": -6.67,
+      "reason": "Lower than average rug correlation (0.0%)",
+      "rug_correlation": 0.0
+    },
+    "BUNDLER_ACTIVITY": {
+      "weight": 0.373,
+      "base_weight": 0.4,
+      "last_adjusted": "2026-01-24T14:55:28.881547+00:00",
+      "adjustment_percent": -6.67,
+      "reason": "Lower than average rug correlation (0.0%)",
+      "rug_correlation": 0.0
+    },
+    "SYBIL_NETWORK": {
+      "weight": 0.429,
+      "base_weight": 0.35,
+      "last_adjusted": "2026-01-24T14:55:28.881702+00:00",
+      "adjustment_percent": 22.5,
+      "reason": "High rug correlation (100.0%) and early buyer rate (100.0%)",
+      "rug_correlation": 1.0
+    },
+    "FUNDING_HUB": {
+      "weight": 0.367,
+      "base_weight": 0.3,
+      "last_adjusted": "2026-01-24T14:55:28.881855+00:00",
+      "adjustment_percent": 22.5,
+      "reason": "High rug correlation (100.0%) and early buyer rate (100.0%)",
+      "rug_correlation": 1.0
+    },
+    "DAISY_CHAIN": {
+      "weight": 0.306,
+      "base_weight": 0.25,
+      "last_adjusted": "2026-01-24T14:55:28.882019+00:00",
+      "adjustment_percent": 22.5,
+      "reason": "High rug correlation (100.0%) and early buyer rate (100.0%)",
+      "rug_correlation": 1.0
+    },
+    "BEHAVIORAL_SIMILARITY": {
+      "weight": 0.187,
+      "base_weight": 0.2,
+      "last_adjusted": "2026-01-24T14:55:28.882187+00:00",
+      "adjustment_percent": -6.67,
+      "reason": "Lower than average rug correlation (0.0%)",
+      "rug_correlation": 0.0
+    }
+  },
+  "learning": {
+    "last_update": "2026-01-24T14:55:28.882731+00:00",
+    "cycles_completed": 1,
+    "total_adjustments": 9
+  }
+}

@@ -1,0 +1,19 @@
+# Ignore compiled python files
+__pycache__/
+*.pyc
+
+# Ignore Logs and Databases
+*.log
+*.rdb
+logs/
+backups/
+
+# Ignore Agent Zero Memory/Cache (Too large/noisy for git)
+global/memory/
+global/cache/
+projects/godmodescanner/data/memory/
+projects/godmodescanner/data/cache/
+projects/godmodescanner/data/graph_data/
+
+# Ignore system files
+.DS_Store
