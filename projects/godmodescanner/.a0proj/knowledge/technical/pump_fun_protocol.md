@@ -30,7 +30,7 @@ tokens_bought = cumulative tokens purchased
 ### Migration
 
 When a token reaches a certain market cap threshold on pump.fun,
-it "graduates" and migrates to Raydium (full DEX). This is when
+it "graduates" and migrates to Pumpswap (full DEX). This is when
 many insiders take profit.
 
 Migration threshold: ~$69,000 market cap (can vary)
@@ -72,7 +72,7 @@ Example buy log:
 |---------|---------|
 | Program ID | 6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P |
 | Fee Vault | (varies per deploy) |
-| Migration Target | Raydium AMM |
+| Migration Target | Pumpswap AMM |
 
 ## Rate Limits
 

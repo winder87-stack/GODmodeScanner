@@ -15,7 +15,7 @@
       "features": [
         "WebSocket streaming (1000+ TPS)",
         "RPC fallback for reliability",
-        "Multi-DEX support (Raydium, Pump.fun, Orca)",
+        "Multi-DEX support (Pumpswap, Pump.fun, Orca)",
         "Transaction parsing and enrichment",
         "Redis pub/sub publishing"
       ],

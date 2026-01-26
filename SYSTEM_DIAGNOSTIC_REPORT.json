@@ -1,0 +1,127 @@
+{
+  "timestamp": "2026-01-25T00:35:41.302455",
+  "summary": {},
+  "all_agents": [],
+  "specialized_agents": {
+    "transaction_monitor": {
+      "status": "not_found",
+      "file_path": null,
+      "missing": [
+        "Agent file not found"
+      ]
+    },
+    "wallet_analyzer": {
+      "status": "not_found",
+      "file_path": null,
+      "missing": [
+        "Agent file not found"
+      ]
+    },
+    "pattern_recognition": {
+      "status": "not_found",
+      "file_path": null,
+      "missing": [
+        "Agent file not found"
+      ]
+    },
+    "sybil_detection": {
+      "status": "not_found",
+      "file_path": null,
+      "missing": [
+        "Agent file not found"
+      ]
+    },
+    "risk_scoring": {
+      "status": "not_found",
+      "file_path": null,
+      "missing": [
+        "Agent file not found"
+      ]
+    },
+    "alert_manager": {
+      "status": "not_found",
+      "file_path": null,
+      "missing": [
+        "Agent file not found"
+      ]
+    }
+  },
+  "knowledge_base": [],
+  "configuration": [],
+  "dependencies": {
+    "python_packages": {},
+    "external_services": {
+      "redis": "not_available",
+      "timescaledb": "not_available"
+    },
+    "data_directories": {
+      "graph_data": "missing",
+      "memory": "missing",
+      "models": "missing",
+      "knowledge": "missing"
+    },
+    "config_files": {
+      "agents.json": "missing",
+      "detection_rules.json": "missing",
+      "orchestrator.json": "missing"
+    }
+  },
+  "startup_requirements": {
+    "install_packages": [],
+    "create_directories": [
+      "graph_data",
+      "memory",
+      "models",
+      "knowledge"
+    ],
+    "configure_files": [
+      "agents.json",
+      "detection_rules.json",
+      "orchestrator.json"
+    ],
+    "setup_commands": [
+      "mkdir -p data/graph_data",
+      "mkdir -p data/memory",
+      "mkdir -p data/models",
+      "mkdir -p data/knowledge"
+    ],
+    "startup_sequence": [
+      {
+        "step": 1,
+        "name": "Start Redis Server",
+        "command": "redis-server --daemonize yes",
+        "description": "Start Redis for pub/sub messaging and caching"
+      },
+      {
+        "step": 2,
+        "name": "Start TimescaleDB",
+        "command": "docker-compose up -d timescaledb",
+        "description": "Start TimescaleDB for time-series data storage"
+      },
+      {
+        "step": 3,
+        "name": "Initialize Database Schema",
+        "command": "python scripts/init_timescaledb.py",
+        "description": "Create database tables and indexes"
+      },
+      {
+        "step": 4,
+        "name": "Start Transaction Monitor",
+        "command": "python agents/transaction_monitor.py",
+        "description": "Begin monitoring pump.fun transactions"
+      },
+      {
+        "step": 5,
+        "name": "Start Orchestrator",
+        "command": "python agents/orchestrator.py",
+        "description": "Coordinate all agents and manage workflow"
+      },
+      {
+        "step": 6,
+        "name": "Start Alert Manager",
+        "command": "python agents/alert_manager_agent.py",
+        "description": "Handle alert generation and delivery"
+      }
+    ]
+  }
+}

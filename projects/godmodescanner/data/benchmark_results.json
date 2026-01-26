@@ -1,0 +1,18 @@
+{
+  "timestamp": 1769311150.7749214,
+  "num_samples": 1000,
+  "alerts_dispatched": 136,
+  "target_latency_us": 800,
+  "achieved_avg_us": 2939.8432279411763,
+  "achieved_min_us": 2758.088,
+  "achieved_max_us": 3010.257,
+  "achieved_p95_us": 2997.54775,
+  "achieved_p99_us": 3007.56415,
+  "stage_breakdown_us": {
+    "websocket_receive_avg": 951.9749485294118,
+    "gpu_compute_avg": 1038.3494044117647,
+    "shared_memory_write_avg": 9.533448529411764,
+    "read_and_check_avg": 6.117625,
+    "alert_dispatch_avg": 923.7618455882352
+  }
+}

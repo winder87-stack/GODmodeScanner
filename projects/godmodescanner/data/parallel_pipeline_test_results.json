@@ -1,0 +1,90 @@
+{
+  "start_time": "2026-01-25T04:55:50.912256",
+  "tests": {
+    "test_1_create_consumer_groups": {
+      "passed": true,
+      "groups_created": [
+        "pattern-recognition-group",
+        "sybil-detection-group",
+        "wallet-analyzer-group"
+      ]
+    },
+    "test_2_produce_messages": {
+      "passed": true,
+      "messages_produced": 100,
+      "first_id": "1769316950917-0",
+      "last_id": "1769316950926-7"
+    },
+    "test_3_consumer_group_info": {
+      "passed": true,
+      "groups_info": {
+        "wallet-analyzer-group": {
+          "name": "wallet-analyzer-group",
+          "pending": 0,
+          "lag": 100
+        },
+        "pattern-recognition-group": {
+          "name": "pattern-recognition-group",
+          "pending": 0,
+          "lag": 100
+        },
+        "sybil-detection-group": {
+          "name": "sybil-detection-group",
+          "pending": 0,
+          "lag": 100
+        }
+      },
+      "total_pending": 0,
+      "backpressure_detected": false
+    },
+    "test_4_read_messages": {
+      "passed": true,
+      "messages_read": 10,
+      "consumer": "test_consumer"
+    },
+    "test_5_acknowledge_messages": {
+      "passed": true,
+      "messages_acknowledged": 10
+    },
+    "test_6_check_pending_messages": {
+      "passed": true,
+      "results": {
+        "wallet-analyzer-group": {
+          "pending_count": 0,
+          "min_id": null,
+          "max_id": null,
+          "consumer_count": 0,
+          "pending_details": 0
+        },
+        "pattern-recognition-group": {
+          "pending_count": 0,
+          "min_id": null,
+          "max_id": null,
+          "consumer_count": 0,
+          "pending_details": 0
+        },
+        "sybil-detection-group": {
+          "pending_count": 0,
+          "min_id": null,
+          "max_id": null,
+          "consumer_count": 0,
+          "pending_details": 0
+        }
+      }
+    },
+    "test_7_fault_tolerance": {
+      "passed": true,
+      "messages_before_crash": 5,
+      "pending_count": 5,
+      "message_claimed_by_new_consumer": true
+    }
+  },
+  "total_messages": 100,
+  "processed_messages": 10,
+  "pending_messages": 0,
+  "backpressure_detected": false,
+  "end_time": "2026-01-25T04:55:51.033683",
+  "total_tests": 7,
+  "passed_tests": 7,
+  "failed_tests": 0
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "name": "SET/GET",
+    "operations": 10000,
+    "duration_sec": 4.069874286651611,
+    "ops_per_sec": 2457.078350748581,
+    "avg_latency_ms": 0.4016693096142262,
+    "p95_latency_ms": 0.562091008760035,
+    "p99_latency_ms": 0.8201250457204878,
+    "errors": 0
+  },
+  {
+    "name": "Hash Ops",
+    "operations": 5000,
+    "duration_sec": 2.2286503314971924,
+    "ops_per_sec": 2243.5103117504455,
+    "avg_latency_ms": 0.44267597554717214,
+    "p95_latency_ms": 0.6251820013858378,
+    "p99_latency_ms": 0.8378780330531299,
+    "errors": 0
+  },
+  {
+    "name": "Pub/Sub",
+    "operations": 1000,
+    "duration_sec": 0.09887099266052246,
+    "ops_per_sec": 10114.189946828392,
+    "avg_latency_ms": 0.09228536690352485,
+    "p95_latency_ms": 0.12394000077620149,
+    "p99_latency_ms": 0.2083759754896164,
+    "errors": 0
+  },
+  {
+    "name": "Concurrent Reads",
+    "operations": 5000,
+    "duration_sec": 0.6931471824645996,
+    "ops_per_sec": 7213.475184623375,
+    "avg_latency_ms": 1.4166158038683028,
+    "p95_latency_ms": 3.235391981434077,
+    "p99_latency_ms": 4.106585984118283,
+    "errors": 4964
+  }
+]

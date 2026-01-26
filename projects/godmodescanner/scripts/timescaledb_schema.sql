@@ -3,7 +3,6 @@
 
 -- Enable TimescaleDB extension
 CREATE EXTENSION IF NOT EXISTS timescaledb;
-CREATE EXTENSION IF NOT EXISTS timescaledb_toolkit;
 
 -- ========== TIME-SERIES TABLES ==========
 
@@ -339,19 +338,85 @@ $$ LANGUAGE plpgsql;
 -- ========== DATA QUALITY & MONITORING ==========
 
 -- Insert a check to ensure hypertables are created
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM timescaledb_information.hypertables WHERE table_name = 'token_launches') THEN
-        RAISE NOTICE 'Token launches hypertable creation failed';
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM timescaledb_information.hypertables WHERE table_name = 'trades') THEN
-        RAISE NOTICE 'Trades hypertable creation failed';
-    END IF;
-END $$;
 
 -- Print success message
-RAISE NOTICE 'GODMODESCANNER TimescaleDB schema initialized successfully!';
-RAISE NOTICE 'Available hypertables: token_launches, trades, wallet_behavior, risk_scores, alert_history, pattern_events, sybil_graph';
-RAISE NOTICE 'Available analytics functions: calculate_token_trend, find_emerging_risks, get_wallet_risk_trend';
-RAISE NOTICE 'Available materialized views: token_risk_hourly, wallet_activity_daily, alert_rates_hourly';
+-- Schema initialization completed successfully
+
+-- ========== WALLET PROFILING TABLES ==========
+
+-- Wallet Profiles (For WalletProfilerAgent)
+-- Stores comprehensive wallet analysis results with pump.fun-specific metrics
+CREATE TABLE IF NOT EXISTS wallet_profiles (
+    wallet_address VARCHAR(44) PRIMARY KEY,
+    
+    -- Pump.fun Trading Metrics
+    win_rate DECIMAL(5, 2) NOT NULL,           -- % of profitable trades (0-100)
+    graduation_rate DECIMAL(5, 2) NOT NULL,    -- % of tokens that migrated to Raydium (0-100)
+    curve_entry DECIMAL(5, 2) NOT NULL,        -- Average bonding curve entry position % (0-100)
+    total_trades INT NOT NULL DEFAULT 0,       -- Total number of trades
+    total_profit DECIMAL(20, 9) DEFAULT 0.0,   -- Total profit in SOL
+    avg_hold_time DECIMAL(10, 2) DEFAULT 0.0,  -- Average holding time in seconds
+    
+    -- Behavior Metrics
+    aggressiveness_score DECIMAL(5, 4) DEFAULT 0.0,  -- 0.0-1.0 scale
+    avg_curve_position DECIMAL(5, 2) DEFAULT 50.0,   -- Average curve position %
+    
+    -- Risk Assessment
+    risk_score DECIMAL(5, 4) NOT NULL,              -- Composite risk score (0.0-1.0)
+    severity VARCHAR(10) NOT NULL,                  -- low, medium, high, critical
+    confidence DECIMAL(5, 4) DEFAULT 0.5,           -- Bayesian confidence (0.0-1.0)
+    confidence_interval_lower DECIMAL(5, 4),        -- 95% credible interval lower bound
+    confidence_interval_upper DECIMAL(5, 4),        -- 95% credible interval upper bound
+    
+    -- Classification Flags
+    is_king_maker BOOLEAN DEFAULT FALSE,     -- Elite insider (>60% grad rate + early entry)
+    is_loser BOOLEAN DEFAULT FALSE,          -- Win rate < 45%
+    is_mev_bot BOOLEAN DEFAULT FALSE,        -- Hold time < 10s
+    
+    -- Historical Data (JSONB for flexibility)
+    historical_metrics JSONB DEFAULT '{}',   -- From HistoricalAnalyzer
+    behavior_metrics JSONB DEFAULT '{}',     -- From BehaviorTracker
+    
+    -- Timestamps
+    timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    last_updated TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Indexes for wallet_profiles
+CREATE INDEX IF NOT EXISTS idx_wallet_profiles_risk ON wallet_profiles (risk_score DESC);
+CREATE INDEX IF NOT EXISTS idx_wallet_profiles_severity ON wallet_profiles (severity);
+CREATE INDEX IF NOT EXISTS idx_wallet_profiles_king_maker ON wallet_profiles (is_king_maker) WHERE is_king_maker = TRUE;
+CREATE INDEX IF NOT EXISTS idx_wallet_profiles_updated ON wallet_profiles (last_updated DESC);
+CREATE INDEX IF NOT EXISTS idx_wallet_profiles_graduation ON wallet_profiles (graduation_rate DESC);
+CREATE INDEX IF NOT EXISTS idx_wallet_profiles_win_rate ON wallet_profiles (win_rate DESC);
+
+-- Partial indexes for filtered queries
+CREATE INDEX IF NOT EXISTS idx_wallet_profiles_high_risk ON wallet_profiles (wallet_address) 
+    WHERE risk_score >= 0.7;
+
+CREATE INDEX IF NOT EXISTS idx_wallet_profiles_insiders ON wallet_profiles (wallet_address) 
+    WHERE is_king_maker = TRUE OR risk_score >= 0.85;
+
+-- Auto-update last_updated timestamp
+CREATE OR REPLACE FUNCTION update_wallet_profiles_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.last_updated = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER wallet_profiles_update_timestamp
+    BEFORE UPDATE ON wallet_profiles
+    FOR EACH ROW
+    EXECUTE FUNCTION update_wallet_profiles_timestamp();
+
+-- Comments for documentation
+COMMENT ON TABLE wallet_profiles IS 'Comprehensive wallet profiling data for pump.fun insider detection';
+COMMENT ON COLUMN wallet_profiles.win_rate IS 'Percentage of profitable trades (0-100)';
+COMMENT ON COLUMN wallet_profiles.graduation_rate IS 'Percentage of tokens that migrated to Raydium (0-100)';
+COMMENT ON COLUMN wallet_profiles.curve_entry IS 'Average bonding curve entry position percentage (0-100, lower = earlier)';
+COMMENT ON COLUMN wallet_profiles.is_king_maker IS 'Elite insider flag: graduation_rate > 60% AND curve_entry < 10%';
+COMMENT ON COLUMN wallet_profiles.is_loser IS 'Filter flag: win_rate < 45%';
+COMMENT ON COLUMN wallet_profiles.is_mev_bot IS 'Filter flag: avg_hold_time < 10 seconds';
 

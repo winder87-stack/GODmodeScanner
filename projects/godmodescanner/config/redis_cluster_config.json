@@ -1,0 +1,82 @@
+{
+    "cluster": {
+        "enabled": true,
+        "name": "guerrilla-redis-cluster",
+        "nodes": [
+            {"host": "127.0.0.1", "port": 16379, "role": "master", "slots": "0-5460"},
+            {"host": "127.0.0.1", "port": 16380, "role": "master", "slots": "5461-10922"},
+            {"host": "127.0.0.1", "port": 16381, "role": "master", "slots": "10923-16383"},
+            {"host": "127.0.0.1", "port": 16382, "role": "replica", "master": 16379},
+            {"host": "127.0.0.1", "port": 16383, "role": "replica", "master": 16380},
+            {"host": "127.0.0.1", "port": 16384, "role": "replica", "master": 16381}
+        ],
+        "entry_points": [
+            "127.0.0.1:16379",
+            "127.0.0.1:16380",
+            "127.0.0.1:16381"
+        ],
+        "replicas": 3,
+        "masters": 3,
+        "slots_total": 16384,
+        "performance_tuning": {
+            "save": "",
+            "appendonly": true,
+            "cluster_node_timeout": 5000,
+            "protected_mode": false
+        }
+    },
+    "agent_config": {
+        "redis_cluster_mode": true,
+        "redis_startup_nodes": [
+            {"host": "127.0.0.1", "port": 16379},
+            {"host": "127.0.0.1", "port": 16380},
+            {"host": "127.0.0.1", "port": 16381}
+        ],
+        "redis_skip_full_coverage_check": true,
+        "redis_socket_timeout": 5,
+        "redis_socket_connect_timeout": 5,
+        "decode_responses": true
+    },
+    "streams": {
+        "godmode:new_transactions": {
+            "consumer_groups": [
+                "wallet-analyzer-group",
+                "pattern-recognition-group",
+                "sybil-detection-group"
+            ],
+            "workers_per_group": 10,
+            "max_pending_threshold": 1000
+        },
+        "godmode:new_tokens": {
+            "consumer_groups": [
+                "early-detection-group",
+                "funding-hub-group"
+            ],
+            "workers_per_group": 5,
+            "max_pending_threshold": 500
+        },
+        "godmode:early_detection": {
+            "consumer_groups": [
+                "graph-traversal-group",
+                "risk-scoring-group"
+            ],
+            "workers_per_group": 10,
+            "max_pending_threshold": 100,
+            "priority": "HIGH"
+        }
+    },
+    "pubsub_channels": {
+        "transactions": "godmode:transactions",
+        "alerts": "godmode:alerts",
+        "wallets": "godmode:wallets",
+        "patterns": "godmode:patterns",
+        "health": "godmode:health"
+    },
+    "key_patterns": {
+        "wallet_profile": "wallet:{address}",
+        "risk_score": "risk:{address}",
+        "transaction": "tx:{signature}",
+        "pattern_match": "pattern:{type}:{tx_hash}",
+        "alert": "alert:{id}"
+    }
+}

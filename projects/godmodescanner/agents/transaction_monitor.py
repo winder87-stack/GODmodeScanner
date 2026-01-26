@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """TRANSACTION_MONITOR Agent - Real-time pump.fun Transaction Streaming.
 
-This is the CRITICAL first-line defense agent in GODMODESCANNER.
+This is CRITICAL first-line defense agent in GODMODESCANNER.
 
 Responsibilities:
 - WebSocket monitoring of Solana for pump.fun transactions
 - Real-time transaction parsing and event detection
 - Token launch detection (<1 second latency)
 - Event broadcasting via Redis pub/sub
+- Data enrichment via AggressiveSolanaClient
 - Performance tracking and health monitoring
 
 Target Performance:
@@ -35,6 +36,7 @@ sys.path.insert(0, str(project_root))
 from utils.ws_manager import WebSocketManager
 from utils.pumpfun_parser import PumpFunParser, EventType
 from utils.redis_pubsub import RedisPubSubManager
+from utils.aggressive_solana_client import AggressiveSolanaClient
 
 # Configure structured logging
 structlog.configure(
@@ -51,11 +53,12 @@ logger = structlog.get_logger(__name__)
 class TransactionMonitor:
     """TRANSACTION_MONITOR Agent - Primary transaction streaming and detection.
 
-    This agent is the first line of defense in GODMODESCANNER, responsible for:
+    This agent is first line of defense in GODMODESCANNER, responsible for:
     - Maintaining WebSocket connections to multiple Solana RPC endpoints
     - Streaming ALL pump.fun program transactions in real-time
     - Parsing and detecting token launch events instantly
     - Broadcasting events to other agents via Redis pub/sub
+    - Enriching data via AggressiveSolanaClient
     - Tracking performance metrics and system health
     """
 
@@ -87,10 +90,21 @@ class TransactionMonitor:
             "6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P"
         )
 
+        # Parse RPC endpoints for AggressiveSolanaClient
+        rpc_endpoints_str = os.getenv(
+            "RPC_ENDPOINTS",
+            "https://api.mainnet-beta.solana.com,https://solana-api.projectserum.com,https://rpc.ankr.com/solana"
+        )
+        self.rpc_endpoints = [e.strip() for e in rpc_endpoints_str.split(",") if e.strip()]
+
         # Initialize components
         self.ws_manager: Optional[WebSocketManager] = None
         self.parser = PumpFunParser()
         self.redis: Optional[RedisPubSubManager] = None
+        
+        # 🚀 Initialize AggressiveSolanaClient for data enrichment
+        self.rpc_client: Optional[AggressiveSolanaClient] = None
+        self.enable_enrichment = os.getenv("ENABLE_RPC_ENRICHMENT", "true").lower() == "true"
 
         # Performance tracking
         self.stats = {
@@ -105,6 +119,10 @@ class TransactionMonitor:
             "events_per_second": 0.0,
             "connections": 0,
             "redis_connected": False,
+            "rpc_client_active": False,
+            "rpc_requests_made": 0,
+            "cache_hits": 0,
+            "cache_misses": 0,
         }
 
         # Shutdown flag
@@ -117,8 +135,10 @@ class TransactionMonitor:
         logger.info(
             "transaction_monitor_initialized",
             ws_endpoints=len(self.ws_endpoints),
+            rpc_endpoints=len(self.rpc_endpoints),
             redis_url=self.redis_url,
             program_id=self.pumpfun_program_id,
+            enable_enrichment=self.enable_enrichment,
         )
 
     def _parse_endpoints(self, endpoints_str: str) -> List[str]:
@@ -151,6 +171,31 @@ class TransactionMonitor:
             else:
                 logger.warning("redis_unavailable_using_fallback", mode="fallback")
 
+            # 🚀 Initialize AggressiveSolanaClient for enrichment
+            if self.enable_enrichment:
+                try:
+                    self.rpc_client = AggressiveSolanaClient(
+                        rpc_endpoints=self.rpc_endpoints,
+                        initial_rps=10.0,
+                        max_rps=50.0,
+                        growth_threshold=50,
+                        max_retries=3,
+                        cache_maxsize=1000
+                    )
+                    self.stats["rpc_client_active"] = True
+                    logger.info(
+                        "rpc_client_initialized",
+                        endpoints=len(self.rpc_endpoints),
+                        client="AggressiveSolanaClient"
+                    )
+                except Exception as e:
+                    logger.warning(
+                        "rpc_client_init_failed",
+                        error=str(e),
+                        mode="websocket_only"
+                    )
+                    self.enable_enrichment = False
+
             # Initialize WebSocket manager
             self.ws_manager = WebSocketManager(
                 endpoints=self.ws_endpoints,
@@ -180,6 +225,7 @@ class TransactionMonitor:
                 status="OPERATIONAL",
                 connections=self.stats["connections"],
                 redis_connected=self.stats["redis_connected"],
+                rpc_client_active=self.stats["rpc_client_active"],
             )
 
             # Publish startup status
@@ -209,12 +255,81 @@ class TransactionMonitor:
         if self.ws_manager:
             await self.ws_manager.stop()
 
+        # Close RPC client
+        if self.rpc_client:
+            await self.rpc_client.close()
+
         # Disconnect Redis
         if self.redis:
             await self.redis.disconnect()
 
         self.stats["status"] = "STOPPED"
         logger.info("transaction_monitor_stopped")
+
+    async def _enrich_transaction_data(self, tx_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Enrich transaction data with additional RPC calls.
+
+        Args:
+            tx_data: Original transaction data from WebSocket
+            
+        Returns:
+            Enriched transaction data with additional wallet/account info
+        """
+        if not self.enable_enrichment or not self.rpc_client:
+            return tx_data
+
+        enriched = tx_data.copy()
+        enrichment_data = {}
+        
+        try:
+            # Extract accounts from transaction
+            accounts = tx_data.get("transaction", {}).get("message", {}).get("accountKeys", [])
+            
+            if accounts:
+                # 🚀 Use batch request to fetch multiple accounts at once
+                batch_params = [
+                    ("getAccountInfo", [account, {"encoding": "jsonParsed"}])
+                    for account in accounts[:10]  # Limit to 10 accounts per transaction
+                ]
+                
+                try:
+                    results = await self.rpc_client.batch(batch_params)
+                    self.stats["rpc_requests_made"] += len(results)
+                    
+                    # Update cache stats
+                    rpc_stats = self.rpc_client.get_stats()
+                    self.stats["cache_hits"] = rpc_stats.get("cache_hits", 0)
+                    self.stats["cache_misses"] = rpc_stats.get("cache_misses", 0)
+                    
+                    # Store enriched data
+                    enrichment_data["accounts"] = {
+                        accounts[i]: result
+                        for i, result in enumerate(results)
+                        if i < len(accounts)
+                    }
+                    
+                    logger.debug(
+                        "transaction_enriched",
+                        accounts_fetched=len(results),
+                        cache_hit_rate=rpc_stats.get("cache_hit_rate", 0)
+                    )
+                    
+                except Exception as e:
+                    logger.debug(
+                        "enrichment_failed",
+                        error=str(e),
+                        mode="websocket_only"
+                    )
+            
+            enriched["enrichment"] = enrichment_data
+            
+        except Exception as e:
+            logger.debug(
+                "enrichment_error",
+                error=str(e)
+            )
+        
+        return enriched
 
     async def _handle_transaction(self, tx_data: Dict[str, Any]):
         """Handle incoming transaction from WebSocket.
@@ -225,8 +340,11 @@ class TransactionMonitor:
         try:
             start_time = datetime.now()
 
+            # 🚀 Enrich transaction data with RPC calls
+            enriched_tx = await self._enrich_transaction_data(tx_data)
+
             # Parse transaction for events
-            events = self.parser.parse_transaction(tx_data)
+            events = self.parser.parse_transaction(enriched_tx)
 
             # Calculate detection latency
             latency_ms = (datetime.now() - start_time).total_seconds() * 1000
@@ -241,12 +359,12 @@ class TransactionMonitor:
             for event in events:
                 await self._process_event(event)
 
-            # Publish raw transaction to Redis
+            # Publish enriched transaction to Redis
             if self.redis:
                 await self.redis.publish(
                     self.CHANNEL_TRANSACTIONS,
                     {
-                        "transaction": tx_data,
+                        "transaction": enriched_tx,
                         "detected_at": datetime.now().isoformat(),
                         "latency_ms": latency_ms,
                     }
@@ -346,18 +464,30 @@ class TransactionMonitor:
             while not self._shutdown:
                 await asyncio.sleep(10)  # Every 10 seconds
 
+                heartbeat_data = {
+                    "agent": "TRANSACTION_MONITOR",
+                    "timestamp": datetime.now().isoformat(),
+                    "status": self.stats["status"],
+                    "uptime_seconds": (
+                        datetime.now() - 
+                        datetime.fromisoformat(self.stats["start_time"])
+                    ).total_seconds(),
+                    "rpc_client_active": self.stats["rpc_client_active"],
+                }
+                
+                # Add RPC client stats if active
+                if self.rpc_client:
+                    rpc_stats = self.rpc_client.get_stats()
+                    heartbeat_data["rpc_stats"] = {
+                        "current_rps": rpc_stats["current_rps"],
+                        "cache_hit_rate": rpc_stats["cache_hit_rate"],
+                        "total_requests": rpc_stats["total_requests"],
+                    }
+
                 if self.redis:
                     await self.redis.publish(
                         self.CHANNEL_HEARTBEAT,
-                        {
-                            "agent": "TRANSACTION_MONITOR",
-                            "timestamp": datetime.now().isoformat(),
-                            "status": self.stats["status"],
-                            "uptime_seconds": (
-                                datetime.now() - 
-                                datetime.fromisoformat(self.stats["start_time"])
-                            ).total_seconds(),
-                        }
+                        heartbeat_data
                     )
 
         except asyncio.CancelledError:
@@ -391,6 +521,12 @@ class TransactionMonitor:
                     ws_metrics = self.ws_manager.get_metrics()
                     self.stats["connections"] = ws_metrics["overall"]["connected_endpoints"]
 
+                # Update RPC client stats
+                if self.rpc_client:
+                    rpc_stats = self.rpc_client.get_stats()
+                    self.stats["cache_hits"] = rpc_stats.get("cache_hits", 0)
+                    self.stats["cache_misses"] = rpc_stats.get("cache_misses", 0)
+                
                 # Log stats
                 logger.info(
                     "transaction_monitor_stats",
@@ -405,9 +541,10 @@ class TransactionMonitor:
     async def _publish_status(self):
         """Publish current status to Redis."""
         if self.redis:
+            status = self.get_status()
             await self.redis.publish(
                 "godmode:status:transaction_monitor",
-                self.stats
+                status
             )
 
     def get_status(self) -> Dict[str, Any]:
@@ -416,7 +553,13 @@ class TransactionMonitor:
         Returns:
             Status dictionary
         """
-        return self.stats.copy()
+        status = self.stats.copy()
+        
+        # Add RPC client stats if active
+        if self.rpc_client:
+            status["rpc_client_stats"] = self.rpc_client.get_stats()
+        
+        return status
 
 
 async def main():

@@ -23,6 +23,7 @@ import asyncio
 import json
 import time
 import logging
+import os
 from datetime import datetime, timezone
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass, asdict
@@ -36,6 +37,15 @@ try:
 except ImportError:
     REDIS_AVAILABLE = False
     print("⚠️  Redis not available - using in-memory fallback")
+
+# psycopg v3 - async PostgreSQL driver
+try:
+    import psycopg
+    from psycopg_pool import AsyncConnectionPool
+    PSYCOPG_AVAILABLE = True
+except ImportError:
+    PSYCOPG_AVAILABLE = False
+    print("⚠️  psycopg v3 not available - database persistence disabled")
 
 # Configure logging
 logging.basicConfig(
@@ -409,6 +419,10 @@ class RiskScoringAgent:
         self.pubsub = None
         self.running = False
 
+        # psycopg v3 connection pool - load from environment variables
+        self.db_pool = None
+        self._load_db_credentials()
+
         # Components
         self.cache = CacheManager(max_size=10000)
         self.calculator = RiskCalculator()
@@ -422,8 +436,11 @@ class RiskScoringAgent:
             'critical_alerts': 0,
             'high_risk_count': 0,
             'total_updates': 0,
+            'db_inserts': 0,
+            'db_errors': 0,
             'start_time': time.time(),
-            'redis_connected': False
+            'redis_connected': False,
+            'db_connected': False
         }
 
         # Input channels (subscribe to 8 channels)
@@ -448,6 +465,114 @@ class RiskScoringAgent:
         }
 
         logger.info("RISK_SCORING agent initialized")
+
+    def _load_db_credentials(self):
+        """Load TimescaleDB credentials from environment variables"""
+        self.db_config = {
+            'host': os.getenv('TIMESCALEDB_HOST', 'localhost'),
+            'port': int(os.getenv('TIMESCALEDB_PORT', '5432')),
+            'user': os.getenv('TIMESCALEDB_USER', 'godmodescanner'),
+            'password': os.getenv('TIMESCALEDB_PASSWORD', 'password'),
+            'database': os.getenv('TIMESCALEDB_DATABASE', 'godmodescanner')
+        }
+        logger.info(f"Database credentials loaded from environment variables")
+        logger.info(f"  Host: {self.db_config['host']}")
+        logger.info(f"  Port: {self.db_config['port']}")
+        logger.info(f"  Database: {self.db_config['database']}")
+
+    def _get_db_connection_string(self) -> str:
+        """Build database connection string from config"""
+        return (
+            f"host={self.db_config['host']} "
+            f"port={self.db_config['port']} "
+            f"dbname={self.db_config['database']} "
+            f"user={self.db_config['user']} "
+            f"password={self.db_config['password']}"
+        )
+
+    async def connect_db(self):
+        """Connect to TimescaleDB using psycopg v3 AsyncConnectionPool"""
+        if not PSYCOPG_AVAILABLE:
+            logger.warning("psycopg v3 not available - database persistence disabled")
+            self.stats['db_connected'] = False
+            return
+
+        try:
+            # Initialize async connection pool
+            # Based on psycopg v3 documentation: https://www.psycopg.org/psycopg3/docs/advanced/pool.html
+            self.db_pool = AsyncConnectionPool(
+                self._get_db_connection_string(),
+                min_size=2,
+                max_size=10,
+                timeout=30,
+                max_lifetime=1800,  # 30 minutes
+                open=False  # Defer opening until first use
+            )
+            await self.db_pool.open()
+            
+            # Test connection
+            async with self.db_pool.connection() as conn:
+                async with conn.cursor() as cur:
+                    await cur.execute("SELECT 1")
+                    result = await cur.fetchone()
+                    if result and result[0] == 1:
+                        self.stats['db_connected'] = True
+                        logger.info(f"✓ Connected to TimescaleDB: {self.db_config['host']}:{self.db_config['port']}")
+                    else:
+                        raise Exception("Database connection test failed")
+                        
+        except Exception as e:
+            logger.warning(f"TimescaleDB connection failed: {e} - persistence disabled")
+            self.stats['db_connected'] = False
+            if self.db_pool:
+                await self.db_pool.close()
+                self.db_pool = None
+
+    async def save_risk_score_to_db(self, score: RiskScore):
+        """
+        Persist risk score to TimescaleDB using psycopg v3.
+        
+        Uses async context managers for safe connection handling:
+        https://www.psycopg.org/psycopg3/docs/basic/install.html
+        """
+        if not self.db_pool or not self.stats['db_connected']:
+            logger.debug(f"[DB DISABLED] Would persist score for {score.token_address or score.wallet_address}")
+            return
+
+        try:
+            async with self.db_pool.connection() as conn:
+                async with conn.cursor() as cur:
+                    # Upsert risk score into TimescaleDB hypertable
+                    await cur.execute("""
+                        INSERT INTO risk_scores (
+                            time, token_address, wallet_address, risk_score, risk_level,
+                            confidence_lower, confidence_upper, evidence_count, factor_scores
+                        ) VALUES (
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s
+                        )
+                        ON CONFLICT (time, token_address, wallet_address) DO UPDATE SET
+                            risk_score = EXCLUDED.risk_score,
+                            risk_level = EXCLUDED.risk_level,
+                            confidence_lower = EXCLUDED.confidence_lower,
+                            confidence_upper = EXCLUDED.confidence_upper,
+                            evidence_count = EXCLUDED.evidence_count,
+                            factor_scores = EXCLUDED.factor_scores
+                    """, (
+                        datetime.fromisoformat(score.timestamp.replace('Z', '+00:00')),
+                        score.token_address,
+                        score.wallet_address,
+                        score.risk_score,
+                        score.risk_level,
+                        score.confidence_interval.lower_bound if score.confidence_interval else None,
+                        score.confidence_interval.upper_bound if score.confidence_interval else None,
+                        score.evidence_count,
+                        json.dumps(asdict(score.factor_scores)) if score.factor_scores else None
+                    ))
+                    self.stats['db_inserts'] += 1
+                    
+        except Exception as e:
+            self.stats['db_errors'] += 1
+            logger.error(f"Failed to persist risk score: {e}")
 
     async def connect_redis(self):
         """Connect to Redis with fallback to in-memory"""
@@ -620,6 +745,9 @@ class RiskScoringAgent:
         # Store in cache
         self.cache.set_token_score(token_address, score_obj)
 
+        # Persist to TimescaleDB using psycopg v3
+        await self.save_risk_score_to_db(score_obj)
+
         # Update statistics
         self.stats['tokens_scored'] += 1
         self.stats['total_updates'] += 1
@@ -698,6 +826,9 @@ class RiskScoringAgent:
 
         # Store in cache
         self.cache.set_wallet_score(wallet_address, score_obj)
+
+        # Persist to TimescaleDB using psycopg v3
+        await self.save_risk_score_to_db(score_obj)
 
         # Update statistics
         self.stats['wallets_scored'] += 1
@@ -779,6 +910,9 @@ class RiskScoringAgent:
             'avg_risk_score': round(avg_risk, 2),
             'confidence_intervals_calculated': self.stats['total_updates'],
             'redis_connected': self.stats['redis_connected'],
+            'db_connected': self.stats['db_connected'],
+            'db_inserts': self.stats['db_inserts'],
+            'db_errors': self.stats['db_errors'],
             'subscribed_channels': len(self.input_channels),
             'cache_size': cache_stats['total_cached'],
             'cache_utilization': round(cache_stats['utilization'] * 100, 1),
@@ -786,7 +920,7 @@ class RiskScoringAgent:
         }
 
         await self.publish_message(self.output_channels['heartbeat'], heartbeat)
-        logger.info(f"💓 Heartbeat: {heartbeat['status']} | Tokens: {heartbeat['tokens_scored']} | Wallets: {heartbeat['wallets_scored']} | Alerts: {heartbeat['critical_alerts']}")
+        logger.info(f"💓 Heartbeat: {heartbeat['status']} | Tokens: {heartbeat['tokens_scored']} | Wallets: {heartbeat['wallets_scored']} | Alerts: {heartbeat['critical_alerts']} | DB: {'✓' if heartbeat['db_connected'] else '✗'}")
 
     async def publish_status(self):
         """Publish detailed status report"""
@@ -871,6 +1005,9 @@ class RiskScoringAgent:
 
         self.running = True
 
+        # Connect to TimescaleDB using psycopg v3
+        await self.connect_db()
+
         # Connect to Redis
         await self.connect_redis()
 
@@ -890,6 +1027,7 @@ class RiskScoringAgent:
         logger.info(f"✓ Subscribed to {len(self.input_channels)} channels")
         logger.info(f"✓ Cache capacity: {self.cache.max_size} entries")
         logger.info(f"✓ Bayesian confidence: 95% intervals")
+        logger.info(f"✓ psycopg v3: {'✓ Connected' if self.stats['db_connected'] else '✗ Disabled'}")
 
         try:
             # Run until shutdown
@@ -898,6 +1036,10 @@ class RiskScoringAgent:
             logger.info("Received interrupt signal")
         finally:
             self.running = False
+            # Close database pool
+            if self.db_pool:
+                await self.db_pool.close()
+                logger.info("✓ TimescaleDB connection pool closed")
             if self.redis_client:
                 await self.redis_client.close()
             logger.info("RISK_SCORING agent stopped")

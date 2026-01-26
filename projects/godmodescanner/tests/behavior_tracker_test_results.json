@@ -1,0 +1,27 @@
+{
+  "total_tests": 5,
+  "passed": 5,
+  "failed": 0,
+  "tests": [
+    {
+      "name": "Track Transaction & Rolling Windows",
+      "status": "PASSED"
+    },
+    {
+      "name": "Detect Burst Activity",
+      "status": "PASSED"
+    },
+    {
+      "name": "Calculate Aggressiveness",
+      "status": "PASSED"
+    },
+    {
+      "name": "Analyze Behavior Patterns",
+      "status": "PASSED"
+    },
+    {
+      "name": "Wallet Behavior Summary",
+      "status": "PASSED"
+    }
+  ]
+}

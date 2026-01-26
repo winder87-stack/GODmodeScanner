@@ -31,7 +31,7 @@ class EventType:
     TOKEN_CREATE = "TokenCreate"
     BUY = "Buy"
     SELL = "Sell"
-    COMPLETE = "Complete"  # Graduated to Raydium
+    COMPLETE = "Complete"  # Graduated to Pumpswap
     UNKNOWN = "Unknown"
 
 
@@ -100,7 +100,7 @@ class TradeEvent:
 
 @dataclass
 class CompleteEvent:
-    """Token graduation to Raydium event."""
+    """Token graduation to Pumpswap event."""
     signature: str
     slot: int
     timestamp: datetime
@@ -128,7 +128,7 @@ class PumpFunParser:
     Decodes transaction logs and account data to extract:
     - Token creation events
     - Buy/Sell transactions
-    - Token graduations to Raydium
+    - Token graduations to Pumpswap
     - Developer actions
 
     Optimized for real-time processing with <100ms latency.
@@ -329,9 +329,9 @@ class PumpFunParser:
         return None
 
     def _parse_complete(self, tx_data: Dict, signature: str, slot: int, block_time: int) -> Optional[CompleteEvent]:
-        """Parse token graduation to Raydium."""
+        """Parse token graduation to Pumpswap."""
         try:
-            # Extract token mint and Raydium pool address
+            # Extract token mint and Pumpswap pool address
             token_mint = self._extract_token_mint_from_trade(tx_data)
             raydium_pool = self._extract_raydium_pool(tx_data)
 
@@ -377,7 +377,7 @@ class PumpFunParser:
         return None
 
     def _extract_raydium_pool(self, tx_data: Dict) -> Optional[str]:
-        """Extract Raydium pool address from completion transaction."""
+        """Extract Pumpswap pool address from completion transaction."""
         # Parse from logs or account keys
         return None  # Implement based on actual transaction structure
 

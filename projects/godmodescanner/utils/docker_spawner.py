@@ -365,8 +365,7 @@ if __name__ == "__main__":
 
         # Get logs
         logs = spawner.get_container_logs("test_agent_001", tail=20)
-        print(f"📝 Logs:
-{logs}")
+        print(f"📝 Logs:\n{logs}")
 
         # Cleanup
         spawner.cleanup_all()

@@ -31,7 +31,7 @@ def init_database():
     print("="*60)
 
     # Load SQL schema
-    sql_path = Path('/a0/usr/projects/godmodescanner/scripts/timescaledb_schema.sql')
+    sql_path = Path('/a0/usr/projects/godmodescanner/projects/godmodescanner/scripts/timescaledb_schema.sql')
     if not sql_path.exists():
         print(f"ERROR: SQL schema not found at {sql_path}")
         sys.exit(1)
@@ -58,11 +58,11 @@ def init_database():
         print("Verifying hypertables...")
         cursor.execute("""
             SELECT 
-                table_name,
+                hypertable_name,
                 chunk_time_interval,
-                compressed_hypertable_name
+                compressed_hyperhypertable_name
             FROM timescaledb_information.hypertables
-            ORDER BY table_name;
+            ORDER BY hypertable_name;
         """)
 
         hypertables = cursor.fetchall()

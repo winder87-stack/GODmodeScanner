@@ -422,3 +422,31 @@ if __name__ == "__main__":
     # Create and run supervisor
     supervisor = SupervisorAgent(config)
     supervisor.run()
+
+
+class AgentRegistry:
+    """Registry for tracking active agents across the system"""
+    
+    def __init__(self, redis_client):
+        self.redis = redis_client
+        self.registry_key = "godmodescanner:agent_registry"
+    
+    def register_agent(self, agent_id: str, agent_info: dict):
+        """Register an agent in the registry"""
+        self.redis.hset(self.registry_key, agent_id, str(agent_info))
+    
+    def unregister_agent(self, agent_id: str):
+        """Remove an agent from the registry"""
+        self.redis.hdel(self.registry_key, agent_id)
+    
+    def get_agent(self, agent_id: str):
+        """Get agent info from registry"""
+        return self.redis.hget(self.registry_key, agent_id)
+    
+    def get_all_agents(self):
+        """Get all registered agents"""
+        return self.redis.hgetall(self.registry_key)
+    
+    def clear_registry(self):
+        """Clear all agents from registry"""
+        self.redis.delete(self.registry_key)

@@ -1,0 +1,21 @@
+{
+  "concurrency": 100,
+  "total_requests": 1000,
+  "successful_requests": 1000,
+  "failed_requests": 1591,
+  "rate_limited": 75,
+  "total_time_seconds": 851.332288980484,
+  "requests_per_second": 1.1746294754044317,
+  "success_rate": 0.0,
+  "latency_ms": {
+    "min": 184.20362402684987,
+    "max": 85116.53260100866,
+    "avg": 15958.73422995623,
+    "median": 2365.1573290117085,
+    "p90": 60085.61304960167,
+    "p95": 75090.99579731992,
+    "p99": 85101.23800233124,
+    "std_dev": 24514.475750821533
+  },
+  "grade": "D (NEEDS IMPROVEMENT)"
+}

@@ -299,7 +299,7 @@ class InsiderDetector:
         await self._detect_wash_trading(event)
 
     async def _handle_completion(self, event: CompleteEvent):
-        """Handle token graduation to Raydium."""
+        """Handle token graduation to Pumpswap."""
         logger.info(
             "token_completed",
             token=event.token_mint,
