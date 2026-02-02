@@ -659,13 +659,38 @@ When MCP server is running, visit:
 
 ## Contributing
 
-Contributions welcome! Please:
+We welcome contributions! This repository follows branch protection best practices to maintain code quality and security.
 
-1. Fork the repository
-2. Create a feature branch
-3. Add tests for new functionality
-4. Ensure all tests pass
-5. Submit a pull request
+### Branch Protection
+
+The `main` branch is protected with the following requirements:
+- ✅ All changes must go through Pull Requests (no direct pushes)
+- ✅ At least 1 approval required before merging
+- ✅ Status checks must pass (CI, tests, security scans)
+- ✅ No force pushes or branch deletion allowed
+
+**📖 See [BRANCH_PROTECTION.md](BRANCH_PROTECTION.md) for detailed setup instructions**
+
+### Quick Contribution Guide
+
+1. **Fork the repository** and clone your fork
+2. **Create a feature branch** (`git checkout -b feature/your-feature`)
+3. **Make your changes** following our coding standards
+4. **Add tests** for new functionality
+5. **Ensure all tests pass** (`pytest tests/`)
+6. **Commit your changes** with clear messages
+7. **Push to your fork** and create a Pull Request
+8. **Wait for review** - address feedback and ensure CI passes
+
+**📖 See [CONTRIBUTING.md](CONTRIBUTING.md) for complete contribution guidelines**
+
+### GitHub Actions Workflows
+
+This repository includes automated workflows:
+- **CI Pipeline** (`.github/workflows/ci.yml`): Linting, testing, building
+- **Security Checks** (`.github/workflows/security.yml`): CodeQL, dependency scanning
+
+These workflows run automatically on pull requests and provide required status checks.
 
 ## License
 
