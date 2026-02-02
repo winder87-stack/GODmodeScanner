@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-01-29T01:28:06.663658",
+  "storage_statistics": {
+    "total_memories": 0,
+    "by_tier": {
+      "recent": 0,
+      "medium": 0,
+      "historical": 0
+    },
+    "by_type": {},
+    "by_importance": {},
+    "total_accesses": 0,
+    "embedding_dimension": 384
+  },
+  "consolidation_metrics": {
+    "consolidations_performed": 2,
+    "patterns_merged": 0,
+    "false_positives_removed": 30,
+    "memories_pruned": 0,
+    "avg_accuracy_improvement": 0.0,
+    "last_consolidation": "2026-01-27T06:19:39.817673"
+  },
+  "pattern_statistics": {
+    "total_patterns": 0,
+    "high_confidence_patterns": 0,
+    "critical_patterns": 0,
+    "avg_confidence": 0.0,
+    "avg_access_count": 0.0
+  },
+  "integration_status": "operational"
+}

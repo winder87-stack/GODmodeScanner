@@ -1,0 +1,21 @@
+{
+  "name": "Insider Profiler",
+  "description": "Specialized mode for WalletProfilerAgent to detect King Makers",
+  "model": {
+    "temperature": 0.0,
+    "max_tokens": 4096
+  },
+  "agent": {
+    "autonomy_level": "high",
+    "auto_approve_tools": true,
+    "max_iterations": 50,
+    "continuous_mode": true
+  },
+  "tools": {
+    "parallel_execution": true,
+    "timeout": 600
+  },
+  "prompts": {
+    "system_prompt_file": "godmodescanner_system_prompt.md"
+  }
+}

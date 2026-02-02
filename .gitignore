@@ -1,19 +1,216 @@
-# Ignore compiled python files
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+PIPFILE.lock
 
-# Ignore Logs and Databases
-*.log
-*.rdb
-logs/
-backups/
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
 
-# Ignore Agent Zero Memory/Cache (Too large/noisy for git)
-global/memory/
-global/cache/
-projects/godmodescanner/data/memory/
-projects/godmodescanner/data/cache/
-projects/godmodescanner/data/graph_data/
-
-# Ignore system files
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 .DS_Store
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Data and Cache
+data/cache/*
+data/models/*.pkl
+data/models/*.pth
+data/models/*.h5
+!data/cache/.gitkeep
+!data/models/.gitkeep
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# Secrets and credentials
+secrets/
+*.pem
+*.key
+*.crt
+*.p12
+
+# Project specific
+mcp_servers/decomposition_server/*
+!mcp_servers/decomposition_server/.gitkeep
+tests/__pycache__/
+tests/*.pyc
+scripts/__pycache__/
+scripts/*.pyc
+
+# Monitoring and metrics data
+prometheus-data/
+grafana-data/
+redis-data/
+
+# Large files
+*.csv
+*.parquet
+*.arrow
+*.feather
+
+# Documentation build
+docs/_build/
+docs/_static/
+docs/_templates/
+
+# ===========================================
+# GODMODESCANNER SPECIFIC (Added Feb 2026)
+# ===========================================
+
+# FAISS Vector Indexes
+*.faiss
+data/memory/*.faiss
+
+# Pickle files (model weights, embeddings)
+*.pkl
+data/memory/*.pkl
+
+# ONNX Models
+*.onnx
+data/models/*.onnx
+
+# Redis Data Files
+dump.rdb
+*.rdb
+*.aof
+appendonly.aof
+appendonlydir/
+data/redis/
+data/redis_cluster/
+nodes-*.conf
+
+# Environment files with secrets
+.env.production
+.env.persistence
+.env.backup
+.env.*.backup
+
+# Generated status/diagnostic files
+SYSTEM_STATUS.json
+SYSTEM_DIAGNOSTIC_REPORT.json
+*_results.json
+*_report.json
+
+# Runtime data directories
+data/memory/patterns/
+data/memory/insights/
+data/memory/wallets/
+data/memory/rules/
+data/graph_data/
+data/knowledge/
+
+# Keep directory structure
+!data/memory/.gitkeep
+!data/redis/.gitkeep
+!data/graph_data/.gitkeep
+!data/models/.gitkeep
+!data/knowledge/.gitkeep
+
+# Embedding cache
+agentzero/memory/
+.a0proj/memory/
+
+# Backup files
+*.backup
+*.bak
+*.old
+
+# Docker Compose overrides
+docker-compose.override.yml
+docker-compose.*.backup

@@ -1,0 +1,53 @@
+/opt/venv/lib/python3.13/site-packages/pytest_asyncio/plugin.py:208: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+
+  warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
+============================= test session starts ==============================
+platform linux -- Python 3.13.11, pytest-8.3.4, pluggy-1.6.0 -- /opt/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /a0/usr/projects/godmodescanner/projects/godmodescanner
+configfile: pytest.ini
+plugins: xprocess-1.0.2, anyio-4.12.1, asyncio-0.24.0, cov-6.0.0
+asyncio: mode=Mode.AUTO, default_loop_scope=None
+collecting ... collected 37 items
+
+tests/test_risk_aggregator.py::TestRiskAggregator::test_high_risk_insider PASSED [  2%]
+tests/test_risk_aggregator.py::TestRiskAggregator::test_low_risk_normal_trader PASSED [  5%]
+tests/test_risk_aggregator.py::TestRiskAggregator::test_critical_risk_high_confidence PASSED [  8%]
+tests/test_risk_aggregator.py::TestRiskAggregator::test_medium_risk_low_confidence PASSED [ 10%]
+tests/test_risk_aggregator.py::TestRiskAggregator::test_all_zeros PASSED [ 13%]
+tests/test_risk_aggregator.py::TestRiskAggregator::test_all_ones PASSED  [ 16%]
+tests/test_risk_aggregator.py::TestRiskAggregator::test_factor_clamping PASSED [ 18%]
+tests/test_risk_aggregator.py::TestRiskAggregator::test_default_sample_sizes PASSED [ 21%]
+tests/test_risk_aggregator.py::TestRiskAggregator::test_confidence_interval PASSED [ 24%]
+tests/test_risk_aggregator.py::TestRiskAggregator::test_severity_thresholds PASSED [ 27%]
+tests/test_risk_aggregator.py::TestRiskAggregator::test_explanation_generation PASSED [ 29%]
+tests/test_risk_aggregator.py::TestRiskAggregator::test_sample_size_impact PASSED [ 32%]
+tests/test_risk_aggregator.py::TestRiskAggregator::test_weighted_contribution PASSED [ 35%]
+tests/test_profile_cache.py::TestProfileCache::test_l1_cache_hit PASSED  [ 37%]
+tests/test_profile_cache.py::TestProfileCache::test_l2_cache_hit PASSED  [ 40%]
+tests/test_profile_cache.py::TestProfileCache::test_cache_miss PASSED    [ 43%]
+tests/test_profile_cache.py::TestProfileCache::test_lru_eviction PASSED  [ 45%]
+tests/test_profile_cache.py::TestProfileCache::test_update_profile_dataclass PASSED [ 48%]
+tests/test_profile_cache.py::TestProfileCache::test_update_profile_dict PASSED [ 51%]
+tests/test_profile_cache.py::TestProfileCache::test_invalidate PASSED    [ 54%]
+tests/test_profile_cache.py::TestProfileCache::test_bulk_prefetch PASSED [ 56%]
+tests/test_profile_cache.py::TestProfileCache::test_bulk_prefetch_partial_miss PASSED [ 59%]
+tests/test_profile_cache.py::TestProfileCache::test_get_stats PASSED     [ 62%]
+tests/test_profile_cache.py::TestProfileCache::test_thread_safety PASSED [ 64%]
+tests/test_profile_cache.py::TestProfileCache::test_bulk_prefetch_empty PASSED [ 67%]
+tests/test_historical_analyzer.py::test_initialization PASSED            [ 70%]
+tests/test_historical_analyzer.py::test_timing_analysis PASSED           [ 72%]
+tests/test_historical_analyzer.py::test_network_analysis PASSED          [ 75%]
+tests/test_historical_analyzer.py::test_volume_analysis PASSED           [ 78%]
+tests/test_historical_analyzer.py::test_performance_analysis PASSED      [ 81%]
+tests/test_historical_analyzer.py::test_suspicion_pattern_detection PASSED [ 83%]
+tests/test_historical_analyzer.py::test_full_integration PASSED          [ 86%]
+tests/test_behavior_tracker.py::test_track_transaction PASSED            [ 89%]
+tests/test_behavior_tracker.py::test_detect_burst_activity PASSED        [ 91%]
+tests/test_behavior_tracker.py::test_calculate_aggressiveness PASSED     [ 94%]
+tests/test_behavior_tracker.py::test_analyze_behavior_patterns PASSED    [ 97%]
+tests/test_behavior_tracker.py::test_wallet_behavior_summary PASSED      [100%]
+
+======================== 37 passed, 5 warnings in 1.64s ========================
+pytest-xprocess reminder::Be sure to terminate the started process by running 'pytest --xkill' if you have not explicitly done so in your fixture with 'xprocess.getinfo(<process_name>).terminate()'.
