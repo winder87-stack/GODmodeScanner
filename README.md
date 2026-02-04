@@ -13,6 +13,21 @@ Inspired by [sendaifun/solana-agent-kit](https://github.com/sendaifun/solana-age
 
 ---
 
+## 📚 Documentation
+
+**NEW**: For a comprehensive, detailed guide to understanding and rebuilding this project from scratch, see **[PROJECT_DOCUMENTATION.md](PROJECT_DOCUMENTATION.md)**
+
+This 2,672-line document includes:
+- Complete architecture breakdown with 14 sections
+- 74 detailed subsections covering every component
+- Step-by-step rebuild guide (12-week timeline)
+- Algorithm implementations with code examples
+- Performance optimization strategies
+- Security best practices
+- Troubleshooting guides
+
+---
+
 ## Key Features
 
 ### 🔍 Real-Time Insider Detection
